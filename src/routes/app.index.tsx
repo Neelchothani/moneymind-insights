@@ -101,9 +101,29 @@ function Dashboard() {
           title={`${greeting()}, ${profile.name}.`}
           subtitle="Here's what your money is telling you this month."
         />
-        <span className="rise rounded-full border border-border bg-secondary/50 px-3 py-1.5 text-xs text-muted-foreground">
-          {monthLabel(a.current.key)} · {a.frequency} transactions
-        </span>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            to="/app/what-if"
+            className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary transition hover:bg-primary/20"
+          >
+            Simulate What-If →
+          </Link>
+          <Link
+            to="/app/health"
+            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-3 py-1.5 text-xs font-medium text-foreground transition hover:bg-secondary"
+          >
+            Health Score
+          </Link>
+          <Link
+            to="/app/upload"
+            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-3 py-1.5 text-xs font-medium text-foreground transition hover:bg-secondary"
+          >
+            Upload PDF
+          </Link>
+          <span className="rise rounded-full border border-border bg-secondary/50 px-3 py-1.5 text-xs text-muted-foreground">
+            {monthLabel(a.current.key)} · {a.frequency} transactions
+          </span>
+        </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

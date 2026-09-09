@@ -43,15 +43,26 @@ function AppLayout() {
             <NavItem key={item.to} {...item} />
           ))}
         </nav>
-        {!hasData && (
-          <button
-            onClick={loadDemo}
-            className="mt-8 w-full rounded-xl bg-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground transition hover:brightness-110"
-          >
-            Load Demo Data
-          </button>
-        )}
-        <p className="mt-8 text-[11px] leading-relaxed text-muted-foreground">
+
+        <div className="mt-8 space-y-2">
+          {!hasData ? (
+            <button
+              onClick={loadDemo}
+              className="w-full rounded-xl bg-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground glow-cyan transition hover:brightness-110"
+            >
+              Load Demo Data
+            </button>
+          ) : (
+            <button
+              onClick={loadDemo}
+              className="w-full rounded-xl border border-border bg-secondary/40 px-3 py-2 text-xs font-medium text-muted-foreground transition hover:bg-secondary hover:text-foreground"
+            >
+              Reload Demo Data
+            </button>
+          )}
+        </div>
+
+        <p className="mt-6 text-[11px] leading-relaxed text-muted-foreground">
           Informational behavioural insights based on the data you provide. Not professional financial advice.
         </p>
       </aside>

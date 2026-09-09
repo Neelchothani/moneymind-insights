@@ -13,7 +13,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppHealthRouteImport } from './routes/app.health'
 import { Route as AppInsightsRouteImport } from './routes/app.insights'
+import { Route as AppTransactionsRouteImport } from './routes/app.transactions'
+import { Route as AppUploadRouteImport } from './routes/app.upload'
+import { Route as AppWhatIfRouteImport } from './routes/app.what-if'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -35,9 +39,29 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppHealthRoute = AppHealthRouteImport.update({
+  id: '/health',
+  path: '/health',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppInsightsRoute = AppInsightsRouteImport.update({
   id: '/insights',
   path: '/insights',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTransactionsRoute = AppTransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppUploadRoute = AppUploadRouteImport.update({
+  id: '/upload',
+  path: '/upload',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppWhatIfRoute = AppWhatIfRouteImport.update({
+  id: '/what-if',
+  path: '/what-if',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -45,13 +69,21 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/onboarding': typeof OnboardingRoute
+  '/app/health': typeof AppHealthRoute
   '/app/insights': typeof AppInsightsRoute
+  '/app/transactions': typeof AppTransactionsRoute
+  '/app/upload': typeof AppUploadRoute
+  '/app/what-if': typeof AppWhatIfRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/onboarding': typeof OnboardingRoute
+  '/app/health': typeof AppHealthRoute
   '/app/insights': typeof AppInsightsRoute
+  '/app/transactions': typeof AppTransactionsRoute
+  '/app/upload': typeof AppUploadRoute
+  '/app/what-if': typeof AppWhatIfRoute
   '/app': typeof AppIndexRoute
 }
 export interface FileRoutesById {
@@ -59,15 +91,46 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/onboarding': typeof OnboardingRoute
+  '/app/health': typeof AppHealthRoute
   '/app/insights': typeof AppInsightsRoute
+  '/app/transactions': typeof AppTransactionsRoute
+  '/app/upload': typeof AppUploadRoute
+  '/app/what-if': typeof AppWhatIfRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/onboarding' | '/app/insights' | '/app/'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/onboarding'
+    | '/app/health'
+    | '/app/insights'
+    | '/app/transactions'
+    | '/app/upload'
+    | '/app/what-if'
+    | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/onboarding' | '/app/insights' | '/app'
-  id: '__root__' | '/' | '/app' | '/onboarding' | '/app/insights' | '/app/'
+  to:
+    | '/'
+    | '/onboarding'
+    | '/app/health'
+    | '/app/insights'
+    | '/app/transactions'
+    | '/app/upload'
+    | '/app/what-if'
+    | '/app'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/onboarding'
+    | '/app/health'
+    | '/app/insights'
+    | '/app/transactions'
+    | '/app/upload'
+    | '/app/what-if'
+    | '/app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,6 +169,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/health': {
+      id: '/app/health'
+      path: '/health'
+      fullPath: '/app/health'
+      preLoaderRoute: typeof AppHealthRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/insights': {
       id: '/app/insights'
       path: '/insights'
@@ -113,16 +183,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInsightsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/transactions': {
+      id: '/app/transactions'
+      path: '/transactions'
+      fullPath: '/app/transactions'
+      preLoaderRoute: typeof AppTransactionsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/upload': {
+      id: '/app/upload'
+      path: '/upload'
+      fullPath: '/app/upload'
+      preLoaderRoute: typeof AppUploadRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/what-if': {
+      id: '/app/what-if'
+      path: '/what-if'
+      fullPath: '/app/what-if'
+      preLoaderRoute: typeof AppWhatIfRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppHealthRoute: typeof AppHealthRoute
   AppInsightsRoute: typeof AppInsightsRoute
+  AppTransactionsRoute: typeof AppTransactionsRoute
+  AppUploadRoute: typeof AppUploadRoute
+  AppWhatIfRoute: typeof AppWhatIfRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppHealthRoute: AppHealthRoute,
   AppInsightsRoute: AppInsightsRoute,
+  AppTransactionsRoute: AppTransactionsRoute,
+  AppUploadRoute: AppUploadRoute,
+  AppWhatIfRoute: AppWhatIfRoute,
   AppIndexRoute: AppIndexRoute,
 }
 

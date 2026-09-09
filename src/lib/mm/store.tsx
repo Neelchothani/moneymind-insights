@@ -18,7 +18,11 @@ type Ctx = {
   hasData: boolean;
   setProfile: (p: Profile) => void;
   addTransactions: (t: Transaction[]) => void;
+  addTransaction: (t: Transaction) => void;
+  updateTransaction: (id: string, patch: Partial<Transaction>) => void;
   removeTransaction: (id: string) => void;
+  replaceTransactions: (t: Transaction[]) => void;
+  clearTransactions: () => void;
   loadDemo: () => void;
   reset: () => void;
 };
@@ -67,10 +71,39 @@ export function MoneymindProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  const addTransaction = useCallback(
+    (t: Transaction) =>
+      setState((s) => ({
+        ...s,
+        transactions: [t, ...s.transactions].sort((a, b) => (a.date < b.date ? 1 : -1)),
+      })),
+    [],
+  );
+
+  const updateTransaction = useCallback(
+    (id: string, patch: Partial<Transaction>) =>
+      setState((s) => ({
+        ...s,
+        transactions: s.transactions.map((t) => (t.id === id ? { ...t, ...patch } : t)),
+      })),
+    [],
+  );
+
   const removeTransaction = useCallback(
     (id: string) => setState((s) => ({ ...s, transactions: s.transactions.filter((t) => t.id !== id) })),
     [],
   );
+
+  const replaceTransactions = useCallback(
+    (t: Transaction[]) =>
+      setState((s) => ({
+        ...s,
+        transactions: [...t].sort((a, b) => (a.date < b.date ? 1 : -1)),
+      })),
+    [],
+  );
+
+  const clearTransactions = useCallback(() => setState((s) => ({ ...s, transactions: [] })), []);
 
   const loadDemo = useCallback(
     () =>
@@ -103,7 +136,11 @@ export function MoneymindProvider({ children }: { children: ReactNode }) {
     hasData: state.transactions.length > 0,
     setProfile,
     addTransactions,
+    addTransaction,
+    updateTransaction,
     removeTransaction,
+    replaceTransactions,
+    clearTransactions,
     loadDemo,
     reset,
   };
