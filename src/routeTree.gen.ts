@@ -15,6 +15,7 @@ import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppHealthRouteImport } from './routes/app.health'
 import { Route as AppInsightsRouteImport } from './routes/app.insights'
+import { Route as AppRiskRouteImport } from './routes/app.risk'
 import { Route as AppTransactionsRouteImport } from './routes/app.transactions'
 import { Route as AppUploadRouteImport } from './routes/app.upload'
 import { Route as AppWhatIfRouteImport } from './routes/app.what-if'
@@ -49,6 +50,11 @@ const AppInsightsRoute = AppInsightsRouteImport.update({
   path: '/insights',
   getParentRoute: () => AppRoute,
 } as any)
+const AppRiskRoute = AppRiskRouteImport.update({
+  id: '/risk',
+  path: '/risk',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppTransactionsRoute = AppTransactionsRouteImport.update({
   id: '/transactions',
   path: '/transactions',
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof OnboardingRoute
   '/app/health': typeof AppHealthRoute
   '/app/insights': typeof AppInsightsRoute
+  '/app/risk': typeof AppRiskRoute
   '/app/transactions': typeof AppTransactionsRoute
   '/app/upload': typeof AppUploadRoute
   '/app/what-if': typeof AppWhatIfRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
   '/app/health': typeof AppHealthRoute
   '/app/insights': typeof AppInsightsRoute
+  '/app/risk': typeof AppRiskRoute
   '/app/transactions': typeof AppTransactionsRoute
   '/app/upload': typeof AppUploadRoute
   '/app/what-if': typeof AppWhatIfRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/onboarding': typeof OnboardingRoute
   '/app/health': typeof AppHealthRoute
   '/app/insights': typeof AppInsightsRoute
+  '/app/risk': typeof AppRiskRoute
   '/app/transactions': typeof AppTransactionsRoute
   '/app/upload': typeof AppUploadRoute
   '/app/what-if': typeof AppWhatIfRoute
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/app/health'
     | '/app/insights'
+    | '/app/risk'
     | '/app/transactions'
     | '/app/upload'
     | '/app/what-if'
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/app/health'
     | '/app/insights'
+    | '/app/risk'
     | '/app/transactions'
     | '/app/upload'
     | '/app/what-if'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/app/health'
     | '/app/insights'
+    | '/app/risk'
     | '/app/transactions'
     | '/app/upload'
     | '/app/what-if'
@@ -183,6 +195,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInsightsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/risk': {
+      id: '/app/risk'
+      path: '/risk'
+      fullPath: '/app/risk'
+      preLoaderRoute: typeof AppRiskRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/transactions': {
       id: '/app/transactions'
       path: '/transactions'
@@ -210,6 +229,7 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppHealthRoute: typeof AppHealthRoute
   AppInsightsRoute: typeof AppInsightsRoute
+  AppRiskRoute: typeof AppRiskRoute
   AppTransactionsRoute: typeof AppTransactionsRoute
   AppUploadRoute: typeof AppUploadRoute
   AppWhatIfRoute: typeof AppWhatIfRoute
@@ -219,6 +239,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppHealthRoute: AppHealthRoute,
   AppInsightsRoute: AppInsightsRoute,
+  AppRiskRoute: AppRiskRoute,
   AppTransactionsRoute: AppTransactionsRoute,
   AppUploadRoute: AppUploadRoute,
   AppWhatIfRoute: AppWhatIfRoute,

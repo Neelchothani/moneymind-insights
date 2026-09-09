@@ -13,7 +13,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Database, TrendingDown, TrendingUp } from "lucide-react";
+import { Database, ShieldAlert, TrendingDown, TrendingUp } from "lucide-react";
 import { Counter, EmptyState, GlassCard, Progress, SectionTitle, StatusPill } from "@/components/mm/primitives";
 import { useEffectiveProfile, useMoneymind } from "@/lib/mm/store";
 import { CATEGORY_COLORS, inr, monthLabel } from "@/lib/mm/types";
@@ -36,7 +36,7 @@ function greeting() {
 }
 
 function Dashboard() {
-  const { hasData, analysis, transactions, loadDemo, ready } = useMoneymind();
+  const { hasData, analysis, transactions, loadDemo, ready, risk } = useMoneymind();
   const profile = useEffectiveProfile();
 
   if (!ready) return <div className="py-24 text-center text-sm text-muted-foreground">Loading your data…</div>;
@@ -103,6 +103,13 @@ function Dashboard() {
         />
         <div className="flex flex-wrap items-center gap-2">
           <Link
+            to="/app/risk"
+            className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-400 transition hover:bg-amber-500/20"
+          >
+            <ShieldAlert className="size-3.5" />
+            Risk: {risk.riskScore}/100 ({risk.riskTier})
+          </Link>
+          <Link
             to="/app/what-if"
             className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary transition hover:bg-primary/20"
           >
@@ -125,6 +132,30 @@ function Dashboard() {
           </span>
         </div>
       </div>
+
+      {risk.riskScore >= 50 && (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent p-4">
+          <div className="flex items-center gap-3">
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400">
+              <ShieldAlert className="size-5" />
+            </div>
+            <div>
+              <p className="font-semibold text-amber-300">
+                Spending Risk Alert · {risk.nextWatchOut.title}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {risk.nextWatchOut.description}
+              </p>
+            </div>
+          </div>
+          <Link
+            to="/app/risk"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-amber-500/40 bg-amber-500/20 px-3 py-1.5 text-xs font-semibold text-amber-300 transition hover:bg-amber-500/30"
+          >
+            View Spending Risk Forecast →
+          </Link>
+        </div>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Kpi label="Monthly income" value={a.income} delay={0} tone="text-foreground" />

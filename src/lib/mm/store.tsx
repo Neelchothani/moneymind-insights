@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import { analyse, type Analysis } from "./analysis";
 import { buildDemoTransactions, DEMO_PROFILE } from "./demoData";
 import { generateInsights, healthScore, type Insight } from "./insights";
+import { calculateSpendingRisk, type SpendingRiskForecast } from "./risk";
 import type { Profile, Transaction } from "./types";
 
 const KEY = "moneymind.v1";
@@ -15,6 +16,7 @@ type Ctx = {
   analysis: Analysis;
   insights: Insight[];
   health: ReturnType<typeof healthScore>;
+  risk: SpendingRiskForecast;
   hasData: boolean;
   setProfile: (p: Profile) => void;
   addTransactions: (t: Transaction[]) => void;
@@ -125,6 +127,10 @@ export function MoneymindProvider({ children }: { children: ReactNode }) {
     [analysis, effProfile, state.transactions.length],
   );
   const health = useMemo(() => healthScore(analysis, effProfile), [analysis, effProfile]);
+  const risk = useMemo(
+    () => calculateSpendingRisk(state.transactions, analysis, effProfile),
+    [state.transactions, analysis, effProfile],
+  );
 
   const value: Ctx = {
     ready,
@@ -133,6 +139,7 @@ export function MoneymindProvider({ children }: { children: ReactNode }) {
     analysis,
     insights,
     health,
+    risk,
     hasData: state.transactions.length > 0,
     setProfile,
     addTransactions,
