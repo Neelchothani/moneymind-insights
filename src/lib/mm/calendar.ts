@@ -1,4 +1,4 @@
-﻿/**
+/**
  * calendar.ts — Recurring Bill Calendar Engine
  *
  * Pure TypeScript. No React. No side effects.
@@ -152,6 +152,7 @@ export function detectRecurringBills(transactions: Transaction[]): RecurringBill
   const byMerchant = new Map<string, Transaction[]>();
   for (const t of transactions) {
     if (t.type !== "expense") continue;
+    if (!["Bills", "Subscriptions", "Education"].includes(t.category)) continue;
     const key = t.merchant.toLowerCase().trim();
     const existing = byMerchant.get(key) ?? [];
     existing.push(t);

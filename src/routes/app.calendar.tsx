@@ -1,4 +1,4 @@
-﻿import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import {
   AlertTriangle,
@@ -50,7 +50,7 @@ const STATUS_META: Record<string, { label: string; cls: string }> = {
 // ─── Page ────────────────────────────────────────────────────────────────────
 
 function BillCalendarPage() {
-  const { recurringBills, hasData, loadDemo } = useMoneymind();
+  const { recurringBills, analysis, hasData, loadDemo } = useMoneymind();
 
   const today = new Date();
   const [viewYear, setViewYear] = useState(today.getFullYear());
@@ -66,6 +66,17 @@ function BillCalendarPage() {
     () => getMonthSummary(recurringBills, viewYear, viewMonth),
     [recurringBills, viewYear, viewMonth],
   );
+
+  const remainingBalance = Math.max(0, analysis.current.income - analysis.current.spending);
+  const remainingBillsTotalThisMonth = useMemo(() => {
+    const todayISO = new Date().toISOString().slice(0, 10);
+    const thisMonthPrefix = todayISO.slice(0, 7);
+    return recurringBills
+      .filter((b) => b.nextDue >= todayISO && b.nextDue.startsWith(thisMonthPrefix))
+      .reduce((sum, b) => sum + b.amount, 0);
+  }, [recurringBills]);
+
+  const hasLowBalance = remainingBalance < remainingBillsTotalThisMonth;
 
   // ── Navigation helpers
   function prevMonth() {
@@ -177,6 +188,20 @@ function BillCalendarPage() {
       </div>
 
       {/* ── Alert banners ──────────────────────────────────────────────── */}
+      {hasLowBalance && remainingBillsTotalThisMonth > 0 && (
+        <div className="flex flex-wrap items-start gap-3 rounded-2xl border border-destructive/30 bg-destructive/8 p-4">
+          <AlertTriangle className="mt-0.5 size-5 shrink-0 text-destructive" />
+          <div className="min-w-0">
+            <p className="font-semibold text-destructive">
+              Low Balance Warning
+            </p>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              Your remaining monthly balance ({inr(remainingBalance)}) is less than the total of your upcoming bills for the rest of this month ({inr(remainingBillsTotalThisMonth)}).
+            </p>
+          </div>
+        </div>
+      )}
+
       {summary.upcomingIn3Days.length > 0 && (
         <div className="flex flex-wrap items-start gap-3 rounded-2xl border border-amber-500/30 bg-amber-500/8 p-4">
           <Clock className="mt-0.5 size-5 shrink-0 text-amber-400" />
