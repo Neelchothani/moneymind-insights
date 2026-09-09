@@ -31,6 +31,8 @@ export type Profile = {
   goal: "Save more" | "Control spending" | "Build emergency fund" | "Reach a specific target";
   savingsTarget: number;
   targetAmount?: number;
+  /** Minimum balance threshold the user wants to maintain (default: 1000) */
+  minBalance?: number;
 };
 
 export const CATEGORY_COLORS: Record<Category, string> = {
