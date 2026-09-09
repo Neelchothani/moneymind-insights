@@ -2,6 +2,7 @@ import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   BarChart3,
+  CalendarDays,
   HeartPulse,
   LayoutDashboard,
   Lightbulb,
@@ -26,6 +27,7 @@ const NAV = [
   { to: "/app/risk", label: "Spending Risk", icon: ShieldAlert },
   { to: "/app/health", label: "Financial Health", icon: HeartPulse },
   { to: "/app/what-if", label: "What If?", icon: Sparkles },
+  { to: "/app/calendar", label: "Bill Calendar", icon: CalendarDays },
   { to: "/app/upload", label: "Upload Statement", icon: Upload },
 ] as const;
 

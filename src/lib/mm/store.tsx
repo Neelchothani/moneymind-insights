@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { analyse, type Analysis } from "./analysis";
+import { detectRecurringBills, type RecurringBill } from "./calendar";
 import { buildDemoTransactions, DEMO_PROFILE } from "./demoData";
 import { generateInsights, healthScore, type Insight } from "./insights";
 import { calculateSpendingRisk, type SpendingRiskForecast } from "./risk";
@@ -17,6 +18,7 @@ type Ctx = {
   insights: Insight[];
   health: ReturnType<typeof healthScore>;
   risk: SpendingRiskForecast;
+  recurringBills: RecurringBill[];
   hasData: boolean;
   setProfile: (p: Profile) => void;
   addTransactions: (t: Transaction[]) => void;
@@ -131,6 +133,10 @@ export function MoneymindProvider({ children }: { children: ReactNode }) {
     () => calculateSpendingRisk(state.transactions, analysis, effProfile),
     [state.transactions, analysis, effProfile],
   );
+  const recurringBills = useMemo(
+    () => detectRecurringBills(state.transactions),
+    [state.transactions],
+  );
 
   const value: Ctx = {
     ready,
@@ -140,6 +146,7 @@ export function MoneymindProvider({ children }: { children: ReactNode }) {
     insights,
     health,
     risk,
+    recurringBills,
     hasData: state.transactions.length > 0,
     setProfile,
     addTransactions,

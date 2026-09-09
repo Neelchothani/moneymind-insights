@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppCalendarRouteImport } from './routes/app.calendar'
 import { Route as AppHealthRouteImport } from './routes/app.health'
 import { Route as AppInsightsRouteImport } from './routes/app.insights'
 import { Route as AppRiskRouteImport } from './routes/app.risk'
@@ -38,6 +39,11 @@ const OnboardingRoute = OnboardingRouteImport.update({
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCalendarRoute = AppCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
   getParentRoute: () => AppRoute,
 } as any)
 const AppHealthRoute = AppHealthRouteImport.update({
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/onboarding': typeof OnboardingRoute
+  '/app/calendar': typeof AppCalendarRoute
   '/app/health': typeof AppHealthRoute
   '/app/insights': typeof AppInsightsRoute
   '/app/risk': typeof AppRiskRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/onboarding': typeof OnboardingRoute
+  '/app/calendar': typeof AppCalendarRoute
   '/app/health': typeof AppHealthRoute
   '/app/insights': typeof AppInsightsRoute
   '/app/risk': typeof AppRiskRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/onboarding': typeof OnboardingRoute
+  '/app/calendar': typeof AppCalendarRoute
   '/app/health': typeof AppHealthRoute
   '/app/insights': typeof AppInsightsRoute
   '/app/risk': typeof AppRiskRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/onboarding'
+    | '/app/calendar'
     | '/app/health'
     | '/app/insights'
     | '/app/risk'
@@ -124,6 +134,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/onboarding'
+    | '/app/calendar'
     | '/app/health'
     | '/app/insights'
     | '/app/risk'
@@ -136,6 +147,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/onboarding'
+    | '/app/calendar'
     | '/app/health'
     | '/app/insights'
     | '/app/risk'
@@ -179,6 +191,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/app/'
       preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/calendar': {
+      id: '/app/calendar'
+      path: '/calendar'
+      fullPath: '/app/calendar'
+      preLoaderRoute: typeof AppCalendarRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/health': {
@@ -227,6 +246,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
+  AppCalendarRoute: typeof AppCalendarRoute
   AppHealthRoute: typeof AppHealthRoute
   AppInsightsRoute: typeof AppInsightsRoute
   AppRiskRoute: typeof AppRiskRoute
@@ -237,6 +257,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppCalendarRoute: AppCalendarRoute,
   AppHealthRoute: AppHealthRoute,
   AppInsightsRoute: AppInsightsRoute,
   AppRiskRoute: AppRiskRoute,

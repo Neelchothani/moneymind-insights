@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMemo } from "react";
 import {
   Area,
   AreaChart,
@@ -13,7 +14,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Database, ShieldAlert, TrendingDown, TrendingUp } from "lucide-react";
+import { CalendarDays, Database, ShieldAlert, TrendingDown, TrendingUp } from "lucide-react";
 import { Counter, EmptyState, GlassCard, Progress, SectionTitle, StatusPill } from "@/components/mm/primitives";
 import { useEffectiveProfile, useMoneymind } from "@/lib/mm/store";
 import { CATEGORY_COLORS, inr, monthLabel } from "@/lib/mm/types";
@@ -36,7 +37,7 @@ function greeting() {
 }
 
 function Dashboard() {
-  const { hasData, analysis, transactions, loadDemo, ready, risk } = useMoneymind();
+  const { hasData, analysis, transactions, loadDemo, ready, risk, recurringBills } = useMoneymind();
   const profile = useEffectiveProfile();
 
   if (!ready) return <div className="py-24 text-center text-sm text-muted-foreground">Loading your data…</div>;
@@ -289,6 +290,52 @@ function Dashboard() {
           </div>
         </GlassCard>
       </div>
+
+      {/* ── Upcoming Bills Teaser ─────────────────────────────────────── */}
+      {recurringBills.length > 0 && (() => {
+        const today = new Date();
+        const todayISO = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+        const upcoming7 = recurringBills
+          .filter((b) => {
+            const diff = Math.round((new Date(b.nextDue + "T00:00:00").getTime() - new Date(todayISO + "T00:00:00").getTime()) / 86_400_000);
+            return diff >= 0 && diff <= 7;
+          })
+          .slice(0, 4);
+        if (upcoming7.length === 0) return null;
+        return (
+          <GlassCard delay={320}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <CalendarDays className="size-4 text-primary" />
+                <h3 className="text-base font-semibold">Upcoming Bills (Next 7 Days)</h3>
+              </div>
+              <Link to="/app/calendar" className="text-xs font-medium text-primary hover:underline">
+                View Calendar →
+              </Link>
+            </div>
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              {upcoming7.map((b) => (
+                <div
+                  key={b.id}
+                  className="flex items-center justify-between gap-3 rounded-xl border border-border bg-secondary/20 px-3 py-2.5"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span
+                      className="size-2 shrink-0 rounded-full"
+                      style={{ background: CATEGORY_COLORS[b.category] }}
+                    />
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium">{b.merchant}</p>
+                      <p className="text-[11px] text-muted-foreground">Due {b.nextDue}</p>
+                    </div>
+                  </div>
+                  <span className="shrink-0 text-sm font-bold">{inr(b.amount)}</span>
+                </div>
+              ))}
+            </div>
+          </GlassCard>
+        );
+      })()}
     </div>
   );
 }
